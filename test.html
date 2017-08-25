@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cat.net/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all-debug_1.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+    <script type="text/javascript">
+
+
+        Ext.define('UserModal', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name: 'id', type: 'int'},
+                {name: 'name', type: 'string'},
+                {name: 'title', type: 'string'}
+            ]
+        });
+
+
+        Ext.onReady(function () {
+
+            // Ajax call
+            var usersFromAJAX = Ext.create('Ext.data.Store', {
+                storeId: 'user',
+                model: 'UserModal',
+                autoLoad: 'true',
+                proxy: {
+                    type: 'ajax',
+                    url: 'example.json',
+                    reader: {
+                        type: 'json',
+                        root: 'customers'
+                    }
+                }
+            });
+
+            // Setting up the Grid
+            Ext.create('Ext.grid.Panel', {
+                store: usersFromAJAX,
+                id: 'user',
+                title: 'Employees',
+                iconCls: 'x-fa fa-users',
+                listeners: {
+                    itemclick: function (view, index, item, record) {
+
+                        var window = Ext.create('Ext.window.Window', {
+                            xtype: 'formpanel',
+                            title: 'Update Record',
+                            width: 300,
+                            height: 200,
+                            floating: true,
+                            centered: true,
+                            modal: true,
+                            record: record,
+                            viewModel: {
+                                data: {
+                                    employee: index.data// employee's name
+                                }
+                            },
+                            items: [{
+                                xtype: 'textfield',
+                                id: 'firstname',
+                                name: 'firstname',
+                                fieldLabel: 'First Name',
+                                bind: '{employee.name}' // biding employee's name
+
+                            },
+                                {
+                                    xtype: 'textfield',
+                                    name: 'firstname',
+                                    fieldLabel: 'Email',
+                                    bind: '{employee.email}' // biding employee's name
+
+                                },
+
+                                {
+                                    xtype: 'toolbar',
+                                    docked: 'bottom',
+                                    style:{
+                                        background: "#ACCCE8",
+                                        padding:'20px'
+                                    },
+                                    items: ['->', {
+                                        xtype: 'button',
+                                        text: 'Update',
+                                        iconCls: 'x-fa fa-check',
+                                        handler: function () {
+                                            console.log("Updating name...");
+//                                            var newname = Ext.getCmp('firstname').getValue();
+//                                            index.data.name.setValue(newname);
+                                            this.up('window').close();
+
+                                        }
+                                    }, {
+                                        xtype: 'button',
+                                        text: 'Cancel',
+                                        iconCls: 'x-fa fa-close',
+                                        handler: function () {
+                                            // this.up('formpanel').destroy();
+                                            this.up('window').close();
+                                            //this.up('window').destroy();
+                                        }
+                                    }]
+                                }]
+
+                        })
+                        window.show();
+                    }
+                },
+                columns: [{
+                    header: 'ID',
+                    dataIndex: 'id',
+                    sortable: false,
+                    hideable: true
+                }, {
+                    header: 'NAME',
+                    dataIndex: 'name',
+                }, {
+                    header: 'Email',
+                    dataIndex: 'title',
+                    flex: 1 // will take the whole table
+                }],
+                height: 300,
+                width: 400,
+                // renderTo: Ext.getBody()
+                renderTo: Ext.getElementById("myTable")
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+
+<div id="myTable"></div>
+</body>
+</html>
