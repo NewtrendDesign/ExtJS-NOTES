@@ -1,0 +1,61 @@
+<!---Containers and components--->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cat.net/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all-debug_1.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+
+</head>
+<body>
+
+
+<script type="text/javascript">
+
+    var myComponent1 = Ext.create("Ext.Component", {
+        html: "My component1"
+    });
+
+    var myComponent2 = Ext.create("Ext.Component", {
+        html: "My component2"
+    });
+
+    var myComponent3 = Ext.create("Ext.Component", {
+        html: "My component3"
+    });
+
+
+    // Creating a container
+    var myContainer = Ext.create("Ext.container.Container", {
+
+        items: [
+            myComponent1, myComponent2, myComponent3
+        ],
+        layout: "vbox", // means vertical
+
+        style:{
+            border: "2px solid red"
+        },
+    });
+
+
+    Ext.application({
+
+        name: "MyApp",
+        launch: function () {
+            Ext.create("Ext.container.Viewport",{
+                items :[
+                   myContainer
+                ]
+            });
+        }
+
+
+    });
+
+
+</script>
+
+</body>
+</html>
+
+

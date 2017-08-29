@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cat.net/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all-debug_1.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+    <script type="text/javascript">
+
+
+        Ext.define('UserModal', {
+            extend: 'Ext.data.Model',
+            fields: ['id', 'name', 'email']
+        });
+
+        Ext.onReady(function () {
+
+            // Setting up the Grid
+            Ext.create('Ext.grid.Panel', {
+                store: {
+                    model: 'UserModal',
+                    autoLoad: 'true',
+                    proxy: {
+                        type: 'ajax',
+                        url: 'example.json',
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'customers'
+                        }
+                    }
+                },
+                listeners: {
+                    itemclick: function (view, record) {
+                        var f = Ext.create('Ext.form.Panel', {
+                            xtype: 'formpanel',
+                            title: 'Update Record',
+                            width: 300,
+                            height: 200,
+                            floating: true,
+                            centered: true,
+                            modal: true,
+                            buttons: [{
+                                text: 'Update',
+                                iconCls: 'x-fa fa-check',
+                                handler: function () {
+                                    f.updateRecord(record);
+                                    f.close();
+                                }
+                            }, {
+                                text: 'Cancel',
+                                iconCls: 'x-fa fa-close',
+                                handler: function () {
+                                    f.close();
+                                }
+                            }],
+                            items: [{
+                                xtype: 'textfield',
+                                id: 'firstname',
+                                name: 'name',
+                                fieldLabel: 'First Name'
+
+                            }, {
+                                xtype: 'textfield',
+                                name: 'email',
+                                fieldLabel: 'Email'
+
+                            }]
+                        })
+                        f.show();
+                        f.loadRecord(record);
+                    }
+                },
+                columns: [{
+                    header: 'ID',
+                    dataIndex: 'id',
+                    sortable: false,
+                    hideable: true
+                }, {
+                    header: 'NAME',
+                    dataIndex: 'name',
+                }, {
+                    header: 'Email',
+                    dataIndex: 'email',
+                    flex: 1 // will take the whole table
+                }],
+                height: 300,
+                width: 400,
+                renderTo: document.body
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+
+<div id="myTable"></div>
+</body>
+</html>

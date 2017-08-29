@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css" rel="stylesheet" /> -->
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cat.net/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all-debug_1.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    Ext.create('Ext.data.Store', {
+        storeId: 'simpsonsStoreMyID',
+        fields:[ 'name', 'title', 'approved'],
+        data: [
+            { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
+            { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
+            { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
+            { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
+        ]
+    });
+    Ext.create('Ext.grid.Panel', {
+        title: 'Simpsons',
+        store: Ext.data.StoreManager.lookup('simpsonsStoreMyID'),
+        columns: [
+            { text: 'Name', dataIndex: 'name' },
+            { text: 'Email', dataIndex: 'title', flex: 1 },
+            { text: 'Phone', dataIndex: 'approved' }
+        ],
+        height: 200,
+        width: 400,
+        renderTo: Ext.getBody()
+    });
+
+
+</script>
+</body>
+</html>
+

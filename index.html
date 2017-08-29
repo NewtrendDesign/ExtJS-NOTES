@@ -1,0 +1,203 @@
+<!--First File show data on table - using each to iterate over each customer's name-->
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css" rel="stylesheet" /> -->
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cat.net/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all-debug_1.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+    <script type="text/javascript">
+
+
+        Ext.define('UserModal', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name: 'id', type: 'int'},
+                {name: 'name', type: 'string'},
+                {name: 'title', type: 'string'}
+            ]
+        });
+
+
+        Ext.onReady(function () {
+
+            // Ajax call
+            var usersFromAJAX = Ext.create('Ext.data.Store', {
+                storeId: 'user',
+                model: 'UserModal',
+                autoLoad: 'true',
+                proxy: {
+                    type: 'ajax',
+                    url: 'example.json',
+                    reader: {
+                        type: 'json',
+                        root: 'customers'
+                    }
+                }
+            });
+
+
+            /******************************************************/
+            // Setting up the Grid
+            Ext.create('Ext.grid.Panel', {
+                store: usersFromAJAX,
+                id: 'user',
+                title: 'Employees',
+                iconCls: 'x-fa fa-users',
+                listeners: {
+                    itemclick: function (view, index, item, record) {
+
+                        var window = Ext.create('Ext.window.Window', {
+                            xtype: 'formpanel',
+                            title: 'Update Record',
+                            width: 300,
+                            height: 200,
+                            draggable: false,
+                            floating: true,
+                            centered: true,
+                            modal: true,
+                            record: record,
+                            viewModel: {
+                                data: {
+                                    employee: index.data// employee's name
+                                }
+                            },
+                            items: [{
+                                xtype: 'textfield',
+                                id: 'firstname',
+                                name: 'firstname',
+                                fieldLabel: 'First Name',
+                                bind: '{employee.name}' // biding employee's name
+
+                            },
+                                {
+                                    xtype: 'textfield',
+                                    name: 'firstname',
+                                    fieldLabel: 'Email',
+                                    bind: '{employee.email}' // biding employee's name
+
+                                },
+
+                                {
+                                    xtype: 'toolbar',
+                                    docked: 'bottom',
+                                    style:{
+                                        background: "#ACCCE8",
+                                        padding:'20px'
+                                    },
+                                    items: ['->', {
+                                        xtype: 'button',
+                                        text: 'Submit',
+                                        iconCls: 'x-fa fa-check',
+                                        handler: function () {
+                                            //var name = Ext.getCmp('firstname').getValue();
+//                                            set()
+                                           // var name2 = Ext.getCmp('firstname').setValue('JohnRambo');
+                                            //index.data.name = name;
+                                            //console.log(name)
+
+                                            console.log(view);
+                                            index.data.name =  'xxx';
+
+                                           //getView().refresh();
+                                            this.up('window').close();
+
+                                        }
+                                    }, {
+                                        xtype: 'button',
+                                        text: 'Cancel',
+                                        iconCls: 'x-fa fa-close',
+                                        handler: function () {
+                                            // this.up('formpanel').destroy();
+                                            this.up('window').close();
+                                            //this.up('window').destroy();
+                                        }
+                                    }]
+                                }]
+
+                        })
+                        window.show();
+                    }
+                },
+                columns: [{
+                    header: 'ID',
+                    dataIndex: 'id',
+                    sortable: false,
+                    hideable: true
+                }, {
+                    header: 'NAME',
+                    dataIndex: 'name',
+                }, {
+                    header: 'Email',
+                    dataIndex: 'title',
+                    flex: 1 // will take the whole table
+                }],
+                height: 300,
+                width: 400,
+                // renderTo: Ext.getBody()
+                renderTo: Ext.getElementById("myTable")
+            });
+
+
+            /*************** Simple Alert button to Show Employee's names ********************/
+
+            // Alert Button to show Users
+            var showUsersNameButton = Ext.create('Ext.Button', {
+                renderTo: Ext.getElementById('myButton2'),
+                text: 'showUsersNameButton'
+            });
+
+
+            showUsersNameButton.on('click', function () {
+                var menu = "";
+
+                // Looping through response
+                usersFromAJAX.each(function (record) {
+                    menu += record.get('name') + "<br/>";
+                });
+
+                Ext.Msg.alert("Usuarios", menu);
+
+            });
+            /*************End of showUsersNameButton - alert**************/
+
+
+
+
+            var button = Ext.create('Ext.Button', {
+                renderTo: Ext.getElementById('myButton'),
+                text: 'My Button'
+            });
+
+            // This way we can attach event to the button after the button is created.
+            button.on('click', function () {
+                var message = "";
+
+                if (Ext.isChrome) {
+                    message = "Yes it is Chrome";
+                } else {
+                    message = "No it is not Chrome";
+                }
+
+                var countries = ['Vietnam', 'Singapore', 'United States', 'Russia'];
+
+                Ext.Array.each(countries, function (name, index, countriesItSelf) {
+                    Ext.Msg.alert('Title', countriesItSelf);
+                    //Ext.MessageBox.alert('Alert box', message);
+                });
+            });
+
+        });
+
+
+    </script>
+</head>
+<body>
+<div id='myButton'></div>
+<br/>
+<div id='myButton2'></div>
+<br/>
+<div id="myTable"></div>
+</body>
+</html>

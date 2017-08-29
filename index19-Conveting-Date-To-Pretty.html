@@ -1,0 +1,159 @@
+<!--Adding new Column, converting date to pretty date and grouping by datTime"-->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cat.net/ajax/libs/extjs/6.0.0/classic/theme-triton/resources/theme-triton-all-debug_1.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.2.0/ext-all-debug.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+    Ext.application({
+        name: 'MyApp',
+        launch: function () {
+
+
+            Ext.create('Ext.data.Store', {
+                storeId: 'CustomersStore',
+                fields:[
+                    'id',
+                    {name: 'title',
+                    sortType: 'acUCText'
+                    },
+                    'approved',
+                    {
+                        dateFormat: 'c',
+                        name: 'sessionTimeDateTime',
+                        sortType: 'asDate',
+                        type: 'date'
+                    },
+                    {
+                        // Conveting date format to pretty format
+                        convert: function (v, rec) {
+                            var convertIt = Ext.util.Format.dateRenderer('m/d/Y g:i a'),
+                                pretty = convertIt(rec.get('sessionTimeDateTime'));
+                            return pretty;
+                        },
+                        name: 'sessionTimePretty',
+                        type: 'string'
+                    }
+
+                ],
+                autoLoad: true,
+                autoSync: true,
+
+                // Creating a proxy
+                proxy:{
+                    type: 'rest',
+                    url: 'sessions.json',
+                    reader:{
+                        type: 'json',
+                        rootProperty: 'data'
+                    }
+                },
+                // Sorting data (Example: email) to be displayed on Grid
+                sorters:[
+                    {
+                        property: 'title'
+                    }
+                ],
+
+                groupField:'sessionTimeDateTime'
+
+
+
+            });
+
+            // Creating a Class -> Then creating an alias -> then using the alias in
+            // { xtype: myalias}
+            Ext.define('CustomersGridPanel', {
+                extend: 'Ext.grid.Panel',
+                alias: 'widget.customersgridpanel', // alias to be used later
+
+                title: 'Customers',
+                store: Ext.data.StoreManager.lookup('CustomersStore'),
+
+                columns: [
+                    { xtype: 'gridcolumn', text: 'ID', dataIndex: 'id' },
+                    { xtype: 'gridcolumn', text: 'TITLE', dataIndex: 'title', flex: 1 , minWidth:100, width:75 },
+                    { xtype: 'gridcolumn', text: 'APPROVED', dataIndex: 'approved' },
+
+                    // Adding New Column
+                    { dataIndex: 'sessionTimePretty',
+                    text: 'Session Start Time',
+                    width: 180}
+                ],
+                height: 500, // Setting up height of Grid
+
+                // Adding Grouping funcionlity Example: "Group 1, Group 2, etc"
+                features: [
+                    {
+                        ftype: 'grouping',
+                        groupHeaderTpl:[
+                            '{[values.rows[0].get(\'sessionTimePretty\')]}(Session Count: {rows.length})'
+                        ]
+                    }
+                ]
+            });
+
+
+
+            Ext.create('Ext.container.Viewport',{
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'panel',
+                        resizable: false,
+                        layout: 'border',
+                        collapsed: false,
+                        items:[
+                            {
+                                xtype: 'container',
+                                region: 'center',
+                                layout:{
+                                    type:'vbox',
+                                    align: 'stretch'
+
+                                },
+
+                                items: [
+                                    {
+                                        xtype: 'customersgridpanel'
+                                    },
+                                    {
+                                        xtype: 'splitter'
+                                    },
+                                    {
+                                        html: '<b>Presenters</b>',
+                                        flex: 2,
+                                        height: 400
+                                    }
+                                ]
+                            },
+                            {
+                                html:  '<b>Details</b>',
+                                flex: 2,
+                                region: 'east',
+                                split: true
+                            }
+                        ]
+                    }
+                ]
+            });
+        }
+    });
+
+
+
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
