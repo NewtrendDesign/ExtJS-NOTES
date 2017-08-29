@@ -31,7 +31,7 @@ accept empty values in input field using allowBlank and formBind"-->
                         type: 'date'
                     },
                     {
-                        // Conveting date format to pretty format
+                        // Converting date format to pretty format
                         convert: function (v, rec) {
                             var convertIt = Ext.util.Format.dateRenderer('m/d/Y g:i a'),
                                 pretty = convertIt(rec.get('sessionTimeDateTime'));
