@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/resources/css/ext-all-neptune.css">
+	<script type="text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/ext-all-debug.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+Ext.Loader.setConfig({
+	enabled: true
+});
+
+Ext.application({
+	name: 'MyApp',
+	launch: function(){
+
+		// Creating Pop-Up using Ext.window.Window
+
+		Ext.define('SessionForm', {
+			extend: 'Ext.window.Window',
+			alias: 'widget.sessionform',
+			padding: 5,
+			width: 600,
+			title: 'Edit Sessions',
+			draggable: false,
+			model: 'true',
+			items: [
+				{
+					xtype: 'form',
+					bodyPadding: 10,
+					title: '',
+					items: [
+					       {
+					       	xtype: 'textfield',
+					       	name: 'title'
+					       },
+					       {
+					       	xtype: 'checkboxfield',
+					       	name: 'approved'
+					       }			
+					]
+				}	
+			]
+		})
+
+		// Creating Grid
+		Ext.define('SessionGridPanel', {
+			title: 'Customers',
+			extend: 'Ext.grid.Panel',
+			alias: 'widget.sessiongridpanel',
+			listeners: {
+				itemdblclick: function(gridpanel, record, item, e){
+					var formwindow = Ext.create('SessionForm');
+					formwindow.show();
+				}
+			},
+
+			store: {
+				fields: [
+				'id', 
+				{
+				  name: 'title',
+				  sortType: 'asUCText'
+				},
+				'approved',
+				{
+                  dateFormat: 'c',
+                  name: 'sessionTimeDateTime',
+                  sortType: 'asDate',
+                  type: 'date'
+                },
+                {
+                // Conveting date format to pretty format
+                convert: function (v, rec) {
+                   var convertIt = Ext.util.Format.dateRenderer('m/d/Y g:i a'),
+                       pretty = convertIt(rec.get('sessionTimeDateTime'));
+                    return pretty;
+                   },
+                  name: 'sessionTimePretty',
+                  type: 'string'
+                 }
+
+				],
+				
+				// Using Proxy instead of hardcoded data
+				autoLoad: true,
+				autoSync: true,
+				proxy: {
+					type: 'rest',
+					url: 'sessions.json',
+					reader:{
+						type: 'json',
+						root: 'data'
+					}
+				},
+
+				sorters:[
+                    {
+                        property: 'title'
+                    }
+                ],
+                // Grouping	
+                groupField: 'sessionTimeDateTime'
+			},
+
+			columns: [
+				{
+				 xtype: 'gridcolumn',
+				 text: "ID",
+				 dataIndex: 'id'	
+				},
+				{
+				 xtype: 'gridcolumn',
+				 text: 'TITLE',
+				 dataIndex: 'title',
+				 flex: 1,
+				 minWidth: 100,
+                 width: 75	
+				},
+				{
+				 text: 'APPROVED',	
+				 xtype: 'gridcolumn',
+				 dataIndex: 'approved',	
+				},
+				{
+					dataIndex: 'sessionTimePretty',
+					text: 'Session Start Time',
+					width: 180
+				}
+			],
+			features: [
+				{
+					ftype: 'grouping',
+					groupHeaderTpl:[
+                            '{[values.rows[0].get(\'sessionTimePretty\')]}(Session Count: {rows.length})'
+                        ]
+				}
+			]
+		});
+		
+		Ext.create('Ext.container.Viewport',{
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'panel',
+                        resizable: false,
+                        layout: 'border',
+                        collapsed: false,
+                        items:[
+                            {
+                              xtype: 'container',
+                              region: 'center',
+                              layout:{
+                                  type:'vbox',
+                                  align: 'stretch'
+
+                            },
+                            items: [
+                                {
+                                	xtype: 'sessiongridpanel',
+                                	flex: 3
+                                },
+                                {
+                                    xtype: 'splitter'
+                                },
+                                {
+                                    html: '<b>Presenters</b>',
+                                    flex: 2
+                                }
+                            ]
+                        },
+                        {
+                            html:  '<b>Details</b>',
+                           flex: 2,
+                           region: 'east',
+                           split: true
+                        }
+                     ]
+                    }
+                ]
+            });
+    }
+});
+
+
+
+</script>
+
+
+</body>
+</html>

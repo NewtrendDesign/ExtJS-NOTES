@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/resources/css/ext-all-neptune.css">
+    <script type="text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/ext-all-debug.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    Ext.application({
+        name: 'MyApp',
+        launch: function(){
+            Ext.create('Ext.container.Viewport', {
+                layout: {
+                    type: 'border'
+                },
+                items: [
+                    {
+                        region: 'west',
+                        layout:{
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        flex: 1,
+                        split: true,
+                        items: [
+                            {
+                                html: 'Sessions Panel',
+                                flex: 2,
+                                xtype: 'panel'
+                            },
+                            {
+                                xtype: 'splitter',
+                                width:1
+                            },
+                            {
+                                html: 'Speakers',
+                                flex: 1,
+                                xtype: 'panel'
+                            }
+                        ]
+                    },
+                    {
+                        region: 'center',
+                        html: 'Details',
+                        flex: 1,
+                        xtype: 'panel',
+                        title: 'Details Panel',
+                        collapsible: true,
+                        collapsed: true,
+                        collapseDirection: 'right'
+                    }
+
+                ]
+            });
+        }
+    });
+
+
+
+</script>
+
+
+</body>
+</html>

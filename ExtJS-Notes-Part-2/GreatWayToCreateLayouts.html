@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/resources/css/ext-all-neptune.css">
+    <script type="text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/ext-all-debug.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+
+    var sessionPanel = Ext.create('Ext.Panel', {
+        html: 'Sessions Panel',
+        flex: 2
+    });
+
+    var detailsPanel = Ext.create('Ext.Panel', {
+        html: 'Details Panel',
+        flex: 3
+    });
+
+    var speakersPanel = Ext.create('Ext.Panel', {
+        html: 'Speakers Panel',
+        flex: 1
+    });
+
+    var combineSessionSpeaker = Ext.create('Ext.Panel', {
+        layout: {
+            type: 'vbox',
+        },
+        items: [
+            sessionPanel, speakersPanel
+        ]
+    });
+
+    Ext.application({
+        name: 'Myapp',
+        launch: function(){
+            Ext.create('Ext.container.Viewport', {
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                items: [combineSessionSpeaker, detailsPanel]
+            });
+        }
+    });
+
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/resources/css/ext-all-neptune.css">
+    <script type="text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/ext-all-debug.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    Ext.application({
+        name: 'Myapp',
+        launch: function(){
+            Ext.create('Ext.container.Viewport', {
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                },
+                items: [
+                    {
+                        xtype: 'panel',
+                        layout:{
+                            type: 'vbox',
+                            align: 'stretch'
+                        },
+                        items: [
+                            {
+                                xtype: 'panel',
+                                html: 'Sessions Panel',
+                                flex: 2
+                            },
+                            {
+                                xtype: 'panel',
+                                html: 'Speakers',
+                                flex: 1
+                            }
+                        ]
+                    }
+                    ,
+                    {
+                        xtype: 'panel',
+                        html: 'Details',
+                        flex: 3
+                    }
+
+                ]
+            });
+        }
+    });
+
+
+
+</script>
+
+
+</body>
+</html>

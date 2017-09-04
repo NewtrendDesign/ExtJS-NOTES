@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/resources/css/ext-all-neptune.css">
+    <script type="text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/extjs/4.2.1/ext-all-debug.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    Ext.Loader.setConfig({
+        enabled: true
+    });
+
+    Ext.application({
+        name: 'MyApp',
+        launch: function(){
+
+            var sessionGridPanel = Ext.create('Ext.grid.Panel', {
+                title: 'Customers',
+                store: {
+                    fields: ['id', 'title','approved'],
+                    data: [
+                        {
+                            id: 101,
+                            title: 'Javascript course',
+                            approved: true
+                        },
+                        {
+                            id: 102,
+                            title: 'C# course',
+                            approved: false
+                        },
+                        {
+                            id: 103,
+                            title: 'ExtJS course',
+                            approved: false
+                        }
+                    ]
+                },
+
+                columns: [
+                    {
+                        xtype: 'gridcolumn',
+                        text: "ID",
+                        dataIndex: 'id'
+                    },
+                    {
+                        xtype: 'gridcolumn',
+                        text: 'TITLE',
+                        dataIndex: 'title',
+                        flex: 1,
+                        miWidth: 100,
+                        width: 75
+                    },
+                    {
+                        text: 'APPROVED',
+                        xtype: 'gridcolumn',
+                        dataIndex: 'approved',
+                    }
+                ]
+            });
+
+            Ext.create('Ext.container.Viewport',{
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'panel',
+                        resizable: false,
+                        layout: 'border',
+                        collapsed: false,
+                        items:[
+                            {
+                                xtype: 'container',
+                                region: 'center',
+                                layout:{
+                                    type:'vbox',
+                                    align: 'stretch'
+
+                                },
+                                items: [
+                                    sessionGridPanel,
+                                    {
+                                        xtype: 'splitter'
+                                    },
+                                    {
+                                        html: '<b>Presenters</b>',
+                                        flex: 2
+                                    }
+                                ]
+                            },
+                            {
+                                html:  '<b>Details</b>',
+                                flex: 2,
+                                region: 'east',
+                                split: true
+                            }
+                        ]
+                    }
+                ]
+            });
+        }
+    });
+
+
+
+</script>
+
+
+</body>
+</html>
